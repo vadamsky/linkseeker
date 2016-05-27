@@ -27,7 +27,7 @@ UdpNetObjectSeeker::~UdpNetObjectSeeker()
     }
     catch(...)
     {
-		std::cout << "UdpNetObjectSeeker: UdpNetObjectSeekerWorker destructor error \n";
+        std::cout << "UdpNetObjectSeeker: UdpNetObjectSeekerWorker destructor error \n";
     }
 }
 
