@@ -8,17 +8,12 @@
 #include <vector>
 #include <string>
 
-
-//#include <boost/algorithm/string.hpp>
-//#include <boost/lexical_cast.hpp>
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
-//#include <thread>
-//#include <mutex> // c++ 11
-using namespace boost::asio;
-
 
 #include "udpnetobjectseeker.h"
+
+using namespace boost::asio;
 
 class UdpReceiver
 {
@@ -43,8 +38,6 @@ public:
             socket_.open(listen_endpoint.protocol());
             socket_.set_option(boost::asio::ip::udp::socket::reuse_address(true));
             socket_.bind(listen_endpoint);
-        ////            socket_.set_option(
-        ////                boost::asio::ip::multicast::join_group(multicast_address));
         }
         catch(std::exception &e)
         {
@@ -52,7 +45,7 @@ public:
         }
 
         socket_.async_receive_from(
-            boost::asio::buffer(data_, max_length), sender_endpoint_,
+            boost::asio::buffer(data_, max_length), endpoint_,
             boost::bind(&UdpReceiver::handle_receive_from, this,
               boost::asio::placeholders::error,
               boost::asio::placeholders::bytes_transferred));
@@ -64,27 +57,17 @@ public:
       {
         if (!error)
         {
-            ////std::cout << "u== << host=" << sender_endpoint_.address() << "  port=" << sender_endpoint_.port() << "  size=" << bytes_recvd << "  msg=" << data_ << std::endl;
-
             if(seek_short)
-                unos->udpSeekPacketWasIncoming(data_, bytes_recvd, sender_endpoint_.address().to_string());
+                unos->udpSeekPacketWasIncoming(data_, bytes_recvd, endpoint_.address().to_string());
             if(!seek_short)
-                unos->udpShortPacketWasIncoming(data_, bytes_recvd, sender_endpoint_.address().to_string());
+                unos->udpShortPacketWasIncoming(data_, bytes_recvd, endpoint_.address().to_string());
 
             socket_.cancel();
-//            socket_.~socket_base();
-//            socket_.socket_base(*ioService);
             socket_.close();
-            //socket_.shutdown(boost::asio::socket_base::shutdown_receive);
             list();
-/*            socket_.async_receive_from(
-                boost::asio::buffer(data_, max_length), sender_endpoint_,
-                boost::bind(&UdpReceiver::handle_receive_from, this,
-                boost::asio::placeholders::error,
-                boost::asio::placeholders::bytes_transferred));*/
         }
         else
-            std::cout << "ERROR in TelemetryData::handle_receive_from: " << error.message() << std::endl;
+            std::cout << "ERROR in UdpReceiver::handle_receive_from: " << error.message() << std::endl;
       }
 
 
@@ -93,7 +76,7 @@ private:
     UdpNetObjectSeekerWorker * unos;
     boost::asio::io_service *ioService;
     boost::asio::ip::udp::socket socket_;
-    boost::asio::ip::udp::endpoint sender_endpoint_;
+    boost::asio::ip::udp::endpoint endpoint_;
     boost::asio::ip::address_v4 listen_address;
     boost::asio::ip::address_v4 multicast_address;
     int port;

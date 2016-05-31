@@ -31,14 +31,14 @@ UdpNetObjectSeeker::~UdpNetObjectSeeker()
     }
 }
 
-void UdpNetObjectSeeker::SubscribeOnEvents(UdpNetObjectSeekersProcessor* pProcessor)
+void UdpNetObjectSeeker::SubscribeToEvents(UdpNetObjectSeekersProcessor* pProcessor)
 {
-    if(unosw) unosw->SubscribeOnEvents(pProcessor);
+    if(unosw) unosw->SubscribeToEvents(pProcessor);
 }
 
-void UdpNetObjectSeeker::DescribeOnEvents(UdpNetObjectSeekersProcessor* pProcessor)
+void UdpNetObjectSeeker::UnsubscribeFromEvents(UdpNetObjectSeekersProcessor* pProcessor)
 {
-    if(unosw) unosw->DescribeOnEvents(pProcessor);
+    if(unosw) unosw->UnsubscribeFromEvents(pProcessor);
 }
 
 

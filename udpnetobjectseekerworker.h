@@ -4,13 +4,14 @@
 #include <vector>
 #include <string>
 #include <map>
-//#include
+
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
-using namespace boost::asio;
 
 #include "udpnetobjectseeker.h"
+
+using namespace boost::asio;
 
 struct PAddr
 {
@@ -31,8 +32,6 @@ class UdpNetObjectSeekerWorker
     friend class UdpSender;
     friend class UdpReceiver;
 public:
-    // is_multicast_or_filename = true:  [ string = multicast address ]
-    // is_multicast_or_filename = false: [ string = filename with multicast address and addresses to send ]
     UdpNetObjectSeekerWorker(int myId_, int secondstoseek_, bool is_multicast_or_filename, std::string multicastaddress_or_filename);
     ~UdpNetObjectSeekerWorker();
 
@@ -43,8 +42,8 @@ public:
     void udpSeekPacketWasIncoming(char * data, int size, std::string ip);
     void udpShortPacketWasIncoming(char * data, int size, std::string ip);
 
-    void SubscribeOnEvents(UdpNetObjectSeekersProcessor* pProcessor = NULL);
-    void DescribeOnEvents(UdpNetObjectSeekersProcessor* pProcessor = NULL);
+    void SubscribeToEvents(UdpNetObjectSeekersProcessor* pProcessor = NULL);
+    void UnsubscribeFromEvents(UdpNetObjectSeekersProcessor* pProcessor = NULL);
 
     void sendShortMessage(std::string data);
 
@@ -59,7 +58,6 @@ private:
 
     std::vector<UdpNetObjectSeekersProcessor*> subscribers;
     std::map<int, ipvector> idToIPmap;
-    //std::multimap<int, std::string> idToIPmap;
 
     int secondstoseek;
     int myId;
