@@ -14,7 +14,6 @@ UdpNetObjectSeekerWorker::UdpNetObjectSeekerWorker(int myId_, int secondstoseek_
 
     try{
         loaderfile = is_multicast_or_filename ? 0 : new LoaderFile(multicastaddress_or_filename);
-        //std::string multicastaddress = is_multicast_or_filename ? multicastaddress_or_filename : loaderfile->getMulticastAddress();
     }
     catch(...)
     {
@@ -37,14 +36,10 @@ UdpNetObjectSeekerWorker::UdpNetObjectSeekerWorker(int myId_, int secondstoseek_
     }
 
     try{
-        //for(std::size_t i=0; i<loaderfile->multicastSeekToSend.size(); i++){
-        UdpReceiver * udpSeekReceiver = new UdpReceiver(&service_recv, this, true, loaderfile->multicastaddress, loaderfile->receive_seekport);
+        UdpReceiver * udpSeekReceiver = new UdpReceiver(&service_recv, this, true, loaderfile->multicastAddress, loaderfile->receive_seekport);
         udpSeekReceivers.push_back(udpSeekReceiver);
-        //}
-        //for(std::size_t i=0; i<loaderfile->multicastShortToSend.size(); i++){
-        UdpReceiver * udpShortReceiver = new UdpReceiver(&service_recv, this, false, loaderfile->multicastaddress, loaderfile->receive_shortport);
+        UdpReceiver * udpShortReceiver = new UdpReceiver(&service_recv, this, false, loaderfile->multicastAddress, loaderfile->receive_shortport);
         udpShortReceivers.push_back(udpShortReceiver);
-        //}
     }
     catch(...)
     {
@@ -60,9 +55,8 @@ UdpNetObjectSeekerWorker::UdpNetObjectSeekerWorker(int myId_, int secondstoseek_
     }
 
     try{
-        io_thread_send = new boost::thread(boost::bind(&boost::asio::io_service::run, &service_send)); // run(service_)
+        io_thread_send = new boost::thread(boost::bind(&boost::asio::io_service::run, &service_send));
         io_thread_recv = new boost::thread(boost::bind(&boost::asio::io_service::run, &service_recv));
-//    service_.run();
     }
     catch(...)
     {
@@ -85,7 +79,7 @@ UdpNetObjectSeekerWorker::~UdpNetObjectSeekerWorker()
         for(std::size_t i=0; i<udpShortReceivers.size(); i++)
             delete udpShortReceivers.at(i);
         if(loaderfile) delete loaderfile;
-        //delete service_;
+
         delete io_thread_send;
         delete io_thread_recv;
     }
@@ -95,7 +89,7 @@ UdpNetObjectSeekerWorker::~UdpNetObjectSeekerWorker()
     }
 }
 
-void UdpNetObjectSeekerWorker::SubscribeOnEvents(UdpNetObjectSeekersProcessor* pProcessor)
+void UdpNetObjectSeekerWorker::SubscribeToEvents(UdpNetObjectSeekersProcessor* pProcessor)
 {
     if(pProcessor == NULL) return;
     for(std::size_t i=0; i<subscribers.size(); i++)
@@ -103,7 +97,7 @@ void UdpNetObjectSeekerWorker::SubscribeOnEvents(UdpNetObjectSeekersProcessor* p
     subscribers.push_back(pProcessor);
 }
 
-void UdpNetObjectSeekerWorker::DescribeOnEvents(UdpNetObjectSeekersProcessor* pProcessor)
+void UdpNetObjectSeekerWorker::UnsubscribeFromEvents(UdpNetObjectSeekersProcessor* pProcessor)
 {
     if(pProcessor == NULL) return;
     for(std::vector<UdpNetObjectSeekersProcessor*>::iterator it=subscribers.begin(); it!=subscribers.end(); it++)

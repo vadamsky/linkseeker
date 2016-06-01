@@ -26,16 +26,15 @@ public:
     LoaderFile(std::string filename);
 
     std::string getMulticastAddress();
-//private:
+
     void getportsfromstring(long & seekp1, long & seekp2, long & shortp1, long & shortp2, std::string str);
-    std::string multicastaddress;
+    std::string multicastAddress;
     long receive_seekport;
     long receive_shortport;
     std::vector<PAddr> multicastSeekToSend;
     std::vector<PAddr> multicastShortToSend;
     std::vector<PAddr> seekToSend;
     std::vector<PAddr> shortToSend;
-    //boost::asio::ip::address addr;
 };
 
 #endif // LOADERFILE_H

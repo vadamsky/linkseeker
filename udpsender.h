@@ -22,12 +22,10 @@ public:
   UdpSender(boost::asio::io_service * io_service, UdpNetObjectSeekerWorker * unos_, std::vector<PAddr> * _seekToSend)
       : endpoint_(boost::asio::ip::address_v4::from_string( "127.0.0.1" ), 3228),
       socket_(*io_service, endpoint_.protocol()),
-      io_service_(io_service)//,
+      io_service_(io_service)
   {
       seekToSend = _seekToSend;
       unos = unos_;
-////      boost::asio::socket_base::broadcast option(true);
-////      socket_.set_option(option);
       socket_.set_option(boost::asio::ip::udp::socket::reuse_address(true));
   }
 
@@ -42,7 +40,6 @@ public:
               std::cout << "ERROR in UdpSender::sendData by addr=" << seekToSend->at(i).addr << std::endl;
           }
       }
-      //socket_.send( boost::asio::buffer(data.c_str(), data.size()) );
   }
 
 private:
@@ -51,7 +48,6 @@ private:
   boost::asio::ip::udp::endpoint endpoint_;
   boost::asio::ip::udp::socket socket_;
   boost::asio::io_service * io_service_;
-//  std::string addr_;
 };
 
 

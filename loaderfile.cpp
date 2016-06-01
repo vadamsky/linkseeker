@@ -1,5 +1,5 @@
 #include <boost/algorithm/string.hpp>
-//#include <sstream>
+
 #include "loaderfile.h"
 #include "udpnetobjectseekerworker.h"
 
@@ -34,15 +34,15 @@ LoaderFile::LoaderFile(std::string filename)
     receive_shortport = atoi(temp.c_str());
     // second string
     temp = lns[1];
-    multicastaddress = temp.substr( 0, temp.find(';') );
-    trim(multicastaddress);
+    multicastAddress = temp.substr( 0, temp.find(';') );
+    trim(multicastAddress);
     getportsfromstring(p1, p2, p3, p4, temp);
     for(long p=p1; p<=p2; p++){
-        PAddr pa(multicastaddress, p);
+        PAddr pa(multicastAddress, p);
         multicastSeekToSend.push_back(pa);
     }
     for(long p=p3; p<=p4; p++){
-        PAddr pa(multicastaddress, p);
+        PAddr pa(multicastAddress, p);
         multicastShortToSend.push_back(pa);
     }
     // other strings

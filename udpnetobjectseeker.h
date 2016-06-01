@@ -28,8 +28,8 @@ public:
     void deleteIpFromAllIds(std::string ip);
     void deleteIpFromId(int id, std::string ip);
 
-    void SubscribeOnEvents(UdpNetObjectSeekersProcessor* pProcessor = NULL);
-    void DescribeOnEvents(UdpNetObjectSeekersProcessor* pProcessor = NULL);
+    void SubscribeToEvents(UdpNetObjectSeekersProcessor* pProcessor = NULL);
+    void UnsubscribeFromEvents(UdpNetObjectSeekersProcessor* pProcessor = NULL);
 
     void sendShortMessage(std::string data);
 
