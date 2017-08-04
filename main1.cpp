@@ -2,16 +2,24 @@
 #include <unistd.h>
 
 using namespace std;
+SECONDS_BETWEEN_SENDS = 10;
+SECONDS_OF_WORK = 200;
+MESSAGE = "message data 1";
 
+// Creates UdpNetObjectSeeker object that works 200 seconds and 
+// sends each 10 seconds message to all devices, that hear it
 int main()
 {
-    UdpNetObjectSeeker unos(1, 10, false, "ips_new1.txt");
-    int i=0;
-    while(i<200){
-        if(i%10==0) unos.sendShortMessage("message data 1");
+    int myId = 1, 
+    int secondsBeetweenSeeks = 10;
+    bool isMulticastOrFilename = false;
+    std::string filename = "ips_new1.txt";
+    UdpNetObjectSeeker unos(myId, secondsBeetweenSeeks, isMulticastOrFilename, filename);
+    int i = 0;
+    while(i < SECONDS_OF_WORK){
+        if(i % SECONDS_BETWEEN_SENDS == 0) unos.sendShortMessage(MESSAGE);
         sleep(1);
         i++;
     }
     return 0;
 }
-
